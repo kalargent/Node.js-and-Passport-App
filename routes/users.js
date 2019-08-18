@@ -1,6 +1,13 @@
 var express =require ("express"); 
 var router = express.Router(); 
 
+// adding in the user model 
+var User = require("../models/User"); 
+
+// adding in bcrypt
+
+var bcrypt = require("bcryptjs"); 
+
 router.get ("/login", (req, res) => res.render("login")); 
 
 router.get ("/register", (req, res) => res.render("register")); 
@@ -39,8 +46,33 @@ router.post("/register", (req, res) => {
             password2
         })
     } else {
-        res.send("pass"); 
-    }
+        // Validation passed 
+        console.log ("you're in else"); 
+        User.findOne({ email: email }) 
+            .then (user => {
+                if (user) {
+                    errors.push({ msg: "Email already in use!"});
+                    // user exists 
+                    res.render("register", {
+                        errors, 
+                        name, 
+                        email, 
+                        password, 
+                        password2
+                    }); 
+                } else {
+                    var newUser = new User({
+                        name, 
+                        email, 
+                        password
+                    }); 
+                    
+                    console.log(newUser); 
+                    res.send("new user"); 
+                }
+            }); 
+        } 
+
 })
 
 module.exports = router; 
