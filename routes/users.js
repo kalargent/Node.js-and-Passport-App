@@ -12,12 +12,12 @@ router.post("/register", (req, res) => {
     // console.log(req.body); 
     // res.send("hello"); 
 
-    var {name, email, password, password2} = req.body; 
+    var { name, email, password, password2 } = req.body; 
+    var errors = []; 
 
     //check required fields 
     if (!name || !email || !password || !password2) {
         errors.push({ msg: "Please fill in all fields." }); 
-
     }
 
     // check for password match 
@@ -28,6 +28,18 @@ router.post("/register", (req, res) => {
     //check pass length 
     if (password.length < 6) {
         errors.push({ msg: "Password must be 6 or more characters." });
+    }
+
+    if (errors.length > 0) {
+        res.render("register" , {
+            errors, 
+            name, 
+            email, 
+            password, 
+            password2
+        })
+    } else {
+        res.send("pass"); 
     }
 })
 
