@@ -70,8 +70,23 @@ router.post("/register", (req, res) => {
                     // console.log(newUser); 
                     // res.send("new user"); 
 
-                    // hash password 
-                    
+                    // Hash password 
+                    bcrypt.genSalt(10, (err, salt) =>
+                        bcrypt.hash (newUser.password, salt, (err, hash) => {
+                            if (err) throw err; 
+
+                            // Set password 
+                            newUser.password = hash; 
+
+                            // Save user 
+                            newUser.save() 
+                                .then (user => {
+                                    req.flash("success_msg", "You're registered and can log in"); 
+                                    res.redirect('/users/login'); 
+                                })
+
+                                .catch (err => console.log(err))
+                        })); 
                 }
             }); 
         } 
