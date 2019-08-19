@@ -67,8 +67,11 @@ router.post("/register", (req, res) => {
                         password
                     }); 
                     
-                    console.log(newUser); 
-                    res.send("new user"); 
+                    // console.log(newUser); 
+                    // res.send("new user"); 
+
+                    // hash password 
+                    
                 }
             }); 
         } 
