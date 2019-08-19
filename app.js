@@ -4,6 +4,10 @@ var app = express ();
 var mongoose = require("mongoose"); 
 var flash = require("connect-flash"); 
 var session = require("express-session"); 
+var passport = require("passport"); 
+
+// Passport Config 
+require("./config/passport")(passport); 
 
 //DB Config
 var db = require("./config/keys").MongoURI; 
@@ -29,14 +33,19 @@ app.use(
     })
   );
 
+  // passport middleware 
+app.use(passport.initialize());
+app.use(passport.session());
+
 //connect.flash
 app.use(flash()); 
 
-// global vars (for connect-flash)
 
+// global vars
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg'); 
-    res.locals.error_msh = req.flash('error_msg'); 
+    res.locals.error_msg = req.flash('error_msg'); 
+    res.locals.error = req.flash("error"); 
     next(); 
 })
 
